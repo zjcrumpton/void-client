@@ -1,3 +1,5 @@
+import { generateCanvas, getPixelRatio } from "./utils/canvas.utils";
+
 class Game {
   private root;
   private viewport;
@@ -9,22 +11,24 @@ class Game {
     if (!root) throw new Error('no root');
     this.root = root;
 
-    this.viewport = document.createElement('canvas');
-
-    const context = this.viewport.getContext('2d');
-    if (!context) throw new Error('no context');
+    const { canvas, context } = generateCanvas(window.innerWidth, window.innerHeight);
+    this.viewport = canvas;
     this.context = context;
 
-    this.viewport.width = 800;
-    this.viewport.height = 600;
-
     this.root?.append(this.viewport);
-  }
+    this.viewport.style.backgroundColor = 'black';
 
-  init = () => {
-    this.context.font = '32px Arial';
-    this.context.fillText('It\'s dangerous to travel this route alone.', 5, 50, 800);
+    // update the canvas size to fit the screen
+    window.addEventListener('resize', this.resize);
   }
+  
+  resize = () => {
+    const ratio = getPixelRatio(this.context);
+    this.viewport.width = Math.round(window.innerWidth * ratio);
+    this.viewport.height = Math.round(window.innerHeight * ratio);
+    this.viewport.style.width = window.innerWidth +'px';
+    this.viewport.style.height = window.innerHeight +'px';
+  };
 }
 
 export default Game;
