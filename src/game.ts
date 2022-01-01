@@ -1,34 +1,11 @@
-import { generateCanvas, getPixelRatio } from "./utils/canvas.utils";
+import Screen from "./screen/screen";
 
 class Game {
-  private root;
-  private viewport;
-  private context;
+  private screen: Screen;
 
-  // render canvas
   constructor() {
-    const root = document.getElementById('root');
-    if (!root) throw new Error('no root');
-    this.root = root;
-
-    const { canvas, context } = generateCanvas(window.innerWidth, window.innerHeight);
-    this.viewport = canvas;
-    this.context = context;
-
-    this.root?.append(this.viewport);
-    this.viewport.style.backgroundColor = 'black';
-
-    // update the canvas size to fit the screen
-    window.addEventListener('resize', this.resize);
+    this.screen = new Screen();
   }
-  
-  resize = () => {
-    const ratio = getPixelRatio(this.context);
-    this.viewport.width = Math.round(window.innerWidth * ratio);
-    this.viewport.height = Math.round(window.innerHeight * ratio);
-    this.viewport.style.width = window.innerWidth +'px';
-    this.viewport.style.height = window.innerHeight +'px';
-  };
 }
 
 export default Game;
