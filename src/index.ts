@@ -1,3 +1,8 @@
-import Game from "./game";
+import Game, { GameSettings } from "./game";
 
-const game = new Game();
+const settings: GameSettings = {
+  showFPS: true,
+  targetFPS: 60,
+}
+
+const game = new Game(settings);

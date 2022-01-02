@@ -18,6 +18,19 @@ class Screen {
     // update the canvas size to fit the screen
     window.addEventListener('resize', this.resize);
   }
+
+  draw = () => {
+    const randomColor = Math.random() > 0.5? '#ff8080' : '#0099b0';
+    this.context.fillStyle = randomColor;
+    this.context.fillRect(100, 50, 200, 175);
+  }
+
+  drawFPS = (FPS: number) => {
+    this.context.clearRect(0, 0, 200, 100);
+    this.context.font = '25px Arial';
+    this.context.fillStyle = 'yellow';
+    this.context.fillText("FPS: " + FPS, 10, 30);
+  }
   
   private resize = () => {
     const ratio = this.getPixelRatio(this.context);
