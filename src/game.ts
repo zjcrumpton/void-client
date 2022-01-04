@@ -1,4 +1,7 @@
+import Entity from "./entities/entitity.interface";
 import Screen from "./screen/screen";
+import { registerKeyEvents } from "./keys/onKeyDown";
+import Server from "./server/Server";
 
 export interface GameSettings {
   showFPS: boolean,
@@ -11,7 +14,7 @@ interface RenderState {
 }
 
 interface GameState {
-
+  entities: Entity[],
 }
 
 class Game {
@@ -19,8 +22,11 @@ class Game {
   private settings: GameSettings;
   private state: GameState;
   private renderState: RenderState;
+  private server: Server;
 
   constructor({ showFPS = false, targetFPS = 60 }: GameSettings) {
+    this.server = new Server();
+
     this.screen = new Screen();
 
     this.settings = {
@@ -28,30 +34,42 @@ class Game {
       targetFPS,
     };
 
-    this.state = {};
+    this.state = {
+      entities: this.server.entities,
+    };
     this.renderState = {
       secondsPassed: 0,
       previousTimeStamp: null,
     };
 
+    this.server.server.on('entities', (entities: Entity[]) => {
+      this.state.entities = entities;
+    })
+
+    registerKeyEvents(this.server);
+
     // start the main game loop
     window.requestAnimationFrame(this.gameLoop);
   }
 
+  spawnEntity = (e: Entity) => {
+    // this.state.entities.push(e);
+  }
+
   gameLoop = (timeStamp: DOMHighResTimeStamp) => {
-    if (this.settings.showFPS) {
-      // Calculate the numver of seconds passed since the last frame
-      this.renderState.secondsPassed = (timeStamp - (this.renderState.previousTimeStamp || 0)) / 1000;
-      this.renderState.previousTimeStamp = timeStamp;
+    // Calculate the number of seconds passed since the last frame
+    this.renderState.secondsPassed = (timeStamp - (this.renderState.previousTimeStamp || 0)) / 1000;
+    this.renderState.previousTimeStamp = timeStamp;
 
-      // Calculate FPS
-      const fps = Math.round(1 / this.renderState.secondsPassed);
+    // Calculate FPS
+    const fps = Math.round(1 / this.renderState.secondsPassed);
 
-      // Draw FPS counter on screen
-      this.screen.drawFPS(fps);
-    }
+    // Draw FPS counter on screen
+    this.screen.drawFPS(fps);
 
-    this.screen.draw();
+    console.log('xx this.state.entities', this.state.entities); // eslint-disable-line
+
+    this.screen.draw(this.state.entities, fps);
 
     window.requestAnimationFrame(this.gameLoop);
   }

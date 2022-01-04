@@ -1,7 +1,10 @@
+import Entity from "../entities/entitity.interface";
+
 class Screen {
   private root;
   private viewport;
   private context;
+  private ratio;
 
   // render canvas
   constructor() {
@@ -12,6 +15,8 @@ class Screen {
     const { canvas, context } = this.generateCanvas(window.innerWidth, window.innerHeight);
     this.viewport = canvas;
     this.context = context;
+    this.ratio = this.getPixelRatio(this.context);
+    this.viewport.style.border = '5px solid red';
 
     this.root?.append(this.viewport);
 
@@ -19,14 +24,29 @@ class Screen {
     window.addEventListener('resize', this.resize);
   }
 
-  draw = () => {
-    const randomColor = Math.random() > 0.5? '#ff8080' : '#0099b0';
-    this.context.fillStyle = randomColor;
-    this.context.fillRect(100, 50, 200, 175);
+  draw = (entities: Entity[], FPS: number) => {
+    this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+
+    this.drawFPS(FPS);
+
+    entities.forEach((e) => {
+        // e.update();
+        this.render(e);
+    });
   }
 
+  render = (e: Entity) => {
+    console.log('xx width, width * ratio', e.state.size.width, e.state.size.width * this.ratio); // eslint-disable-line
+    this.context.fillStyle = 'blue';
+    this.context.fillRect(
+      e.state.position.x,
+      e.state.position.y,
+      e.state.size.width * this.ratio,
+      e.state.size.height * this.ratio,
+    );
+  }
   drawFPS = (FPS: number) => {
-    this.context.clearRect(0, 0, 200, 100);
+    // this.context.clearRect(0, 0, 200, 100);
     this.context.font = '25px Arial';
     this.context.fillStyle = 'yellow';
     this.context.fillText("FPS: " + FPS, 10, 30);
@@ -34,6 +54,8 @@ class Screen {
   
   private resize = () => {
     const ratio = this.getPixelRatio(this.context);
+    console.log('xx ', this.ratio, ratio); // eslint-disable-line
+    this.ratio = ratio;
     this.viewport.width = Math.round(window.innerWidth * ratio);
     this.viewport.height = Math.round(window.innerHeight * ratio);
     this.viewport.style.width = window.innerWidth +'px';
@@ -73,7 +95,7 @@ class Screen {
 
     canvas.style.backgroundColor = 'black';
   
-    return { canvas, context }
+    return { canvas, context };
   };
 }
 
