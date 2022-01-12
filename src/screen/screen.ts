@@ -12,11 +12,11 @@ class Screen {
     if (!root) throw new Error('no root');
     this.root = root;
 
-    const { canvas, context } = this.generateCanvas(window.innerWidth, window.innerHeight);
+    const { canvas, context } = this.generateCanvas();
     this.viewport = canvas;
     this.context = context;
     this.ratio = this.getPixelRatio(this.context);
-    this.viewport.style.border = '5px solid red';
+    // this.viewport.style.border = '5px solid red';
 
     this.root?.append(this.viewport);
 
@@ -53,13 +53,11 @@ class Screen {
   }
   
   private resize = () => {
-    const ratio = this.getPixelRatio(this.context);
-    console.log('xx ', this.ratio, ratio); // eslint-disable-line
-    this.ratio = ratio;
-    this.viewport.width = Math.round(window.innerWidth * ratio);
-    this.viewport.height = Math.round(window.innerHeight * ratio);
-    this.viewport.style.width = window.innerWidth +'px';
-    this.viewport.style.height = window.innerHeight +'px';
+    this.viewport.height = window.innerHeight;
+    this.viewport.width = window.innerHeight * (16/9);
+
+    this.viewport.style.width = this.viewport.width +'px';
+    this.viewport.style.height = this.viewport.height +'px';
   };
 
   private getPixelRatio = (context: CanvasRenderingContext2D) => {
@@ -73,23 +71,24 @@ class Screen {
   
     const deviceRatio = window.devicePixelRatio;
   
-    const backingRatio = backingStores.reduce((prev, curr) => {
+    const backingRatio = backingStores.reduce((_prev, curr) => {
       return (context.hasOwnProperty(curr) ? (context as any)[curr] : 1);
     });
   
     return deviceRatio / (backingRatio as unknown as number);
   };
 
-  private generateCanvas = (w: number, h: number) => {
+  private generateCanvas = () => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (!context) throw new Error('no context');
     const ratio = this.getPixelRatio(context);
   
-    canvas.width = Math.round(w * ratio);
-    canvas.height = Math.round(h * ratio);
-    canvas.style.width = w +'px';
-    canvas.style.height = h +'px';
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerHeight * (16/9);
+
+    canvas.style.width = canvas.width +'px';
+    canvas.style.height = canvas.height +'px';
   
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
 

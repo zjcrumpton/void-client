@@ -52,10 +52,6 @@ class Game {
     window.requestAnimationFrame(this.gameLoop);
   }
 
-  spawnEntity = (e: Entity) => {
-    // this.state.entities.push(e);
-  }
-
   gameLoop = (timeStamp: DOMHighResTimeStamp) => {
     // Calculate the number of seconds passed since the last frame
     this.renderState.secondsPassed = (timeStamp - (this.renderState.previousTimeStamp || 0)) / 1000;
@@ -65,9 +61,9 @@ class Game {
     const fps = Math.round(1 / this.renderState.secondsPassed);
 
     // Draw FPS counter on screen
-    this.screen.drawFPS(fps);
-
-    console.log('xx this.state.entities', this.state.entities); // eslint-disable-line
+    if (this.settings.showFPS) {
+      this.screen.drawFPS(fps);
+    }
 
     this.screen.draw(this.state.entities, fps);
 

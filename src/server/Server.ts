@@ -6,7 +6,7 @@ class Server {
   private _entities: Entity[];
 
   constructor() {
-    this._server = io('localhost:8080');
+    this._server = io('http://localhost:8080');
     this._entities = [];
 
     this._server.on('connect', () => {
