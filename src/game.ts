@@ -37,6 +37,7 @@ class Game {
     this.state = {
       entities: this.server.entities,
     };
+    
     this.renderState = {
       secondsPassed: 0,
       previousTimeStamp: null,

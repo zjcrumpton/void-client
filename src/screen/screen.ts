@@ -1,10 +1,14 @@
 import Entity from "../entities/entitity.interface";
+import screenState, { CellState } from "./sampleScreen";
+
 
 class Screen {
   private root;
-  private viewport;
+  private canvas;
   private context;
   private ratio;
+  private height = 864;
+  private width = 1296;
 
   // render canvas
   constructor() {
@@ -13,38 +17,54 @@ class Screen {
     this.root = root;
 
     const { canvas, context } = this.generateCanvas();
-    this.viewport = canvas;
+    this.canvas = canvas;
     this.context = context;
-    this.ratio = this.getPixelRatio(this.context);
-    // this.viewport.style.border = '5px solid red';
-
-    this.root?.append(this.viewport);
+    this.ratio = 1;// this.getPixelRatio(this.context);
+    this.canvas.style.border = '5px solid var(--gameboy-grey)';
+    this.canvas.style.boxSizing = 'border-box';
+  
+    this.root?.append(this.canvas);
 
     // update the canvas size to fit the screen
     window.addEventListener('resize', this.resize);
   }
 
   draw = (entities: Entity[], FPS: number) => {
-    this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawFPS(FPS);
 
+    Object.keys(screenState).forEach((c) => {
+      this.renderCell(screenState[c]);
+    }); 
+
     entities.forEach((e) => {
-        // e.update();
-        this.render(e);
+      // e.update();
+      this.renderEntity(e);
     });
   }
 
-  render = (e: Entity) => {
+  renderCell = (c: CellState) => {
+    this.context.fillStyle = c.tile.color;
+    this.context.fillRect(
+      c.position.x * (this.width / 24), 
+      c.position.y * (this.height / 16), 
+      54 * this.ratio, 
+      54 * this.ratio,
+    );
+  }
+
+  renderEntity = (e: Entity) => {
     console.log('xx width, width * ratio', e.state.size.width, e.state.size.width * this.ratio); // eslint-disable-line
     this.context.fillStyle = 'blue';
     this.context.fillRect(
       e.state.position.x,
       e.state.position.y,
-      e.state.size.width * this.ratio,
-      e.state.size.height * this.ratio,
+      54 * this.ratio,
+      54 * this.ratio,
     );
   }
+
   drawFPS = (FPS: number) => {
     // this.context.clearRect(0, 0, 200, 100);
     this.context.font = '25px Arial';
@@ -53,44 +73,52 @@ class Screen {
   }
   
   private resize = () => {
-    this.viewport.height = window.innerHeight;
-    this.viewport.width = window.innerHeight * (16/9);
+    this.canvas.height = this.height;
+    this.canvas.width = this.width;
 
-    this.viewport.style.width = this.viewport.width +'px';
-    this.viewport.style.height = this.viewport.height +'px';
+    this.canvas.style.width = window.innerWidth + 'px';
+    this.canvas.style.height = window.innerHeight +'px';
+
+    // this.canvas.style.top = `${(window.innerHeight / 2) - (this.canvas.height / 2)}px`;
+    // this.canvas.style.left = `${(window.innerWidth / 2) - (this.canvas.width / 2)}px`;
   };
 
-  private getPixelRatio = (context: CanvasRenderingContext2D) => {
-    const backingStores = [
-      'webkitBackingStorePixelRatio',
-      'mozBackingStorePixelRatio',
-      'msBackingStorePixelRatio',
-      'oBackingStorePixelRatio',
-      'backingStorePixelRatio'
-    ];
+  // private getPixelRatio = (context: CanvasRenderingContext2D) => {
+  //   const backingStores = [
+  //     'webkitBackingStorePixelRatio',
+  //     'mozBackingStorePixelRatio',
+  //     'msBackingStorePixelRatio',
+  //     'oBackingStorePixelRatio',
+  //     'backingStorePixelRatio'
+  //   ];
   
-    const deviceRatio = window.devicePixelRatio;
+  //   const deviceRatio = window.devicePixelRatio;
   
-    const backingRatio = backingStores.reduce((_prev, curr) => {
-      return (context.hasOwnProperty(curr) ? (context as any)[curr] : 1);
-    });
+  //   const backingRatio = backingStores.reduce((_prev, curr) => {
+  //     return (context.hasOwnProperty(curr) ? (context as any)[curr] : 1);
+  //   });
   
-    return deviceRatio / (backingRatio as unknown as number);
-  };
+  //   return deviceRatio / (backingRatio as unknown as number);
+  // };
+
 
   private generateCanvas = () => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (!context) throw new Error('no context');
-    const ratio = this.getPixelRatio(context);
-  
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerHeight * (16/9);
+    // const ratio = this.getPixelRatio(context);
+    
+    canvas.height = this.height;
+    canvas.width = this.width;
 
-    canvas.style.width = canvas.width +'px';
-    canvas.style.height = canvas.height +'px';
-  
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight +'px';
+
+    // canvas.style.top = `${(window.innerHeight / 2) - (canvas.height / 2)}px`;
+    // canvas.style.left = `${(window.innerWidth / 2) - (canvas.width / 2)}px`;
+
+    
+    // context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
     canvas.style.backgroundColor = 'black';
   
