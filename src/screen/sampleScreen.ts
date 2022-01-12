@@ -70,13 +70,9 @@ type ScreenState = {
 const createScreen = (configs: ScreenConfigs = defaultConfigs): ScreenState => {
   const { tile = defaultConfigs.tile } = configs;
   const screen = {};
-  let flip = true;
-  let otherFlip = true;
   for (let i = 0; i < 16; i++) {
-    flip = !flip;
     for (let j = 0; j < 24; j++) {
-      otherFlip = !otherFlip;
-      if (flip && otherFlip) {
+      if ((i % 2 === 0 && j % 2 !== 0) || (i % 2 !== 0 && j % 2 === 0)) {
         screen[`${letters[i]}${j}`] = {tile, position: {x: j, y: i}};
       } else {
         screen[`${letters[i]}${j}`] = {tile: tileMap[TileName.GRASS], position: {x: j, y: i}};
