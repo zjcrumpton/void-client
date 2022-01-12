@@ -16,4 +16,4 @@ const keyMap = {
   40: Keys.DOWN,
 }
 
-export default keyMap
+export default keyMap;

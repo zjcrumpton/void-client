@@ -49,6 +49,8 @@ const registerKeyEvents = (server: Server) => {
           break;
       }
     }
+
+    server.server.emit('keyDown', { isPressed });
   }
 }
 
