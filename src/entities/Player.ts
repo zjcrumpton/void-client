@@ -31,7 +31,7 @@ class Player implements Entity {
   }
 
   render = (context: CanvasRenderingContext2D, ratio: number) => {
-    console.log('xx width, width * ratio', this._state.size.width, this._state.size.width * ratio); // eslint-disable-line
+    // console.log('xx width, width * ratio', this._state.size.width, this._state.size.width * ratio); // eslint-disable-line
     context.fillStyle = 'blue';
     context.fillRect(
       this._state.position.x,

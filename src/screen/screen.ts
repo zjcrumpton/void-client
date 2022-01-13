@@ -55,7 +55,7 @@ class Screen {
   }
 
   renderEntity = (e: Entity) => {
-    console.log('xx width, width * ratio', e.state.size.width, e.state.size.width * this.ratio); // eslint-disable-line
+    // console.log('xx width, width * ratio', e.state.size.width, e.state.size.width * this.ratio); // eslint-disable-line
     this.context.fillStyle = e.state.color;
     this.context.fillRect(
       e.state.position.x,
@@ -65,7 +65,8 @@ class Screen {
     );
     this.context.font = '20px Arial';
     this.context.fillStyle = 'white';
-    this.context.fillText(e.state.name, e.state.position.x, e.state.position.y - 5);
+    this.context.textAlign = 'center';
+    this.context.fillText(e.state.name, e.state.position.x + 27, e.state.position.y - 5);
   }
 
   drawFPS = (FPS: number) => {

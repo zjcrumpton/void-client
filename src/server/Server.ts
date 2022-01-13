@@ -13,6 +13,7 @@ class Server {
       console.log('connected');
       this._server.emit('join', id);
     });
+
   }
 
   get server() {
