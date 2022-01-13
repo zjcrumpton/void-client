@@ -25,6 +25,9 @@ const registerKeyEvents = (server: Server) => {
         case Keys.UP:
           isPressed[Keys.UP] = true;
           break;
+        case Keys.SPRINT:
+          isPressed[Keys.SPRINT] = true;
+          break;
       }
     }
 
@@ -46,6 +49,9 @@ const registerKeyEvents = (server: Server) => {
           break;
         case Keys.UP:
           isPressed[Keys.UP] = false;
+          break;
+        case Keys.SPRINT:
+          isPressed[Keys.SPRINT] = false;
           break;
       }
     }

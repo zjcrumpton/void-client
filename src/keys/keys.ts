@@ -3,6 +3,7 @@ export enum Keys {
   LEFT = 'left',
   DOWN = 'down',
   UP = 'up',
+  SPRINT = 'sprint',
 }
 
 const keyMap = {
@@ -14,6 +15,7 @@ const keyMap = {
   37: Keys.LEFT,
   39: Keys.RIGHT,
   40: Keys.DOWN,
+  16: Keys.SPRINT,
 }
 
 export default keyMap;
