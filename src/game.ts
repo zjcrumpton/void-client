@@ -24,8 +24,8 @@ class Game {
   private renderState: RenderState;
   private server: Server;
 
-  constructor({ showFPS = false, targetFPS = 60 }: GameSettings) {
-    this.server = new Server();
+  constructor({ showFPS = false, targetFPS = 60 }: GameSettings, id: string) {
+    this.server = new Server(id);
 
     this.screen = new Screen();
 

@@ -5,12 +5,13 @@ class Server {
   private _server: Socket;
   private _entities: Entity[];
 
-  constructor() {
+  constructor(id: string) {
     this._server = io('http://localhost:8080');
     this._entities = [];
 
     this._server.on('connect', () => {
       console.log('connected');
+      this._server.emit('join', id);
     });
   }
 

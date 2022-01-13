@@ -1,4 +1,6 @@
 export interface EntityState {
+  name: string,
+  color: string,
   size: {
     height: number,
     width: number,
@@ -9,6 +11,7 @@ export interface EntityState {
   },
   speed: number,
 }
+
 
 interface Entity {
   state: EntityState;

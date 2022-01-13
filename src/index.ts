@@ -26,7 +26,7 @@ const register = async () => {
   const res = await axios.post('http://localhost:8080/register', authData);
   if (res.data.status === 'SUCCESS') {
     console.log(res.data);
-    const game = new Game(settings);
+    const game = new Game(settings, res.data.player.id);
   } else {
     window.alert(res.data.error);
     register();
@@ -38,7 +38,7 @@ const login = async (data: AuthData) => {
 
   if (res.data.status === 'SUCCESS') {
     console.log(res.data);
-    const game = new Game(settings);
+    const game = new Game(settings, res.data.player.id);
   } else {
     window.alert(res.data.error);
     register();

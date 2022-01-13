@@ -5,6 +5,8 @@ class Player implements Entity {
   private _state: EntityState;
 
   constructor({ 
+    name = "Joe",
+    color = "blue",
     speed = 1.5,
     position: {
       x = 0,
@@ -16,6 +18,8 @@ class Player implements Entity {
     }
   }: EntityState) {
     this._state = {
+      name,
+      color,
       speed,
       position: { x, y },
       size: { height, width }

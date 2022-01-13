@@ -56,13 +56,16 @@ class Screen {
 
   renderEntity = (e: Entity) => {
     console.log('xx width, width * ratio', e.state.size.width, e.state.size.width * this.ratio); // eslint-disable-line
-    this.context.fillStyle = 'blue';
+    this.context.fillStyle = e.state.color;
     this.context.fillRect(
       e.state.position.x,
       e.state.position.y,
       54 * this.ratio,
       54 * this.ratio,
     );
+    this.context.font = '20px Arial';
+    this.context.fillStyle = 'white';
+    this.context.fillText(e.state.name, e.state.position.x, e.state.position.y - 5);
   }
 
   drawFPS = (FPS: number) => {
